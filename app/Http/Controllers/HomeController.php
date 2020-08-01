@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Auth;
 
 class HomeController extends Controller
 {
@@ -23,6 +24,19 @@ class HomeController extends Controller
      */
     public function index()
     {
-        return view('home');
+        $user = Auth::user();
+        $roles = $user->roles->first()->name;
+
+        if ($roles == 'administrator') {
+            return redirect(route('admin.index'));
+        } elseif ($roles == 'operator') {
+            return redirect(route('operator.index'));
+        } elseif ($roles == 'employee-waiters') {
+            return redirect(route('waiters.index'));
+        } elseif ($roles == 'employee-cashier') {
+            return redirect(route('cashier.index'));
+        } elseif ($roles == 'employee-kitchen') {
+            return redirect(route('kitchen.index'));
+        }
     }
 }
